@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-creates the State California with the City San Francisco from the database
+lists all State objects and corresponding City objects contained in a database
 """
 
 import sqlalchemy
@@ -18,8 +18,9 @@ if __name__ == "__main__":
     Base.metadata.create_all(eng)
     Session = sessionmaker(bind=eng)
     session = Session()
-    cali = State(name="California")
-    cali.cities = [City(name="San Francisco")]
-    session.add(cali)
-    session.commit()
+    rows = session.query(State).all()
+    for state in rows:
+        print("{}: {}".format(state.id, state.name))
+        for city in state.cities:
+            print("    {}: {}".format(city.id, city.name))
     session.close()
